@@ -1,15 +1,20 @@
+onclick="return check(this.form)" value="Login" target="_blank"
 <html>
 <head>
 </head>
 <body>
-<form action="/registerAuth" method="POST">
+<form action="/loginAuth" method="POST">
 	<input type="text" name = "username" placeholder="username" required/> </br>
 	<input type="password" name = "password" placeholder="password" required/></br>
-	<input type="submit" value = Register />
+	<input type="submit" onclick="location.href='index.html'" value = Login />
 	{% if error %}
 		<p class="error"><strong>Error:</strong> {{error}}</p>
 	{% endif %}
 </form>
-<a href="/">Go back</a>
+
+<a href="Downloads/Flask_for_class/templates">Go back</a>
+
 </body>
+
+
 </html>

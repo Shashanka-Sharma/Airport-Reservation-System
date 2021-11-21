@@ -1,0 +1,73 @@
+<html>
+<head>
+</head>
+<body>
+	<h1>Airlines</h1>
+
+</form>
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+
+<div class="topnav">
+  <input type="text" placeholder="Search..">
+</div>
+
+
+<table>
+	<th>Flights</th>
+	<th>Source airport</th>
+	<th>Destination Airport</th>
+	<th>Departure Dates</th>
+	<th>Status</th>
+
+{% for line in posts %}
+	<tr>
+		<td>{{line['flight']}}</td>
+		<td>{{line['Source_airport']}}</td>
+		<td>{{line['Destination_Airport']}}</td>
+		<td>{{line['Departure_Dates']}}</td>
+		<td>{{line['Status']}}</td>
+
+	</tr>
+{% endfor %}
+</table>
+<input type="submit" value = Purchase><br><br>
+
+
+<a href="login.html"> Login </a>
+<br>
+<a href="register.html"> register </a>
+<br>
+<a href="login.html">Logout</a>
+
+
+
+
+
+
+<div class="chart-wrap vertical">
+  <h2 class="title">Spending</h2>
+  <div class="grid">
+  <div class="bar" style="--bar-value:100%;" data-name="Small" title="Flight One"></div>
+        <div class="bar" style="--bar-value:25%;" data-name="Medium" title="Flight Two"></div>   
+  </div>
+</div>
+
+
+</body>
+
+
+
+
+</html>
+
+
+
+
+
+

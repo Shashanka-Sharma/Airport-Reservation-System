@@ -1,0 +1,59 @@
+<html>
+<head>
+</head>
+<body>
+	<h1>Airlines</h1>
+
+</form>
+
+<style type="text/css">
+	table, th, td{
+		border: 1px solid black;
+	}
+</style>
+
+
+
+<div class="topnav">
+  <input type="text" placeholder="Search..">
+</div>
+
+
+<!-- 
+
+Anyone (including users not signed in) can see flights (future flights) based on the source airport,
+destination airport, source city, or destination city, departure date for one way (departure and return
+dates for round trip). Additionally, anyone can see the status (delayed/on time etc.) of the flight based
+on an airline and flight number combination and arrival or departure date.
+
+ -->
+
+<table>
+	<th>Flights</th>
+	<th>Source airport</th>
+	<th>Destination Airport</th>
+	<th>Departure Dates</th>
+	<th>Status</th>
+
+{% for line in posts %}
+	<tr>
+		<td>{{line['flight']}}</td>
+		<td>{{line['Source_airport']}}</td>
+		<td>{{line['Destination_Airport']}}</td>
+		<td>{{line['Departure_Dates']}}</td>
+		<td>{{line['Status']}}</td>
+
+	</tr>
+{% endfor %}
+</table>
+
+<a href="login.html"> Login </a>
+<br></br>
+<a href="register.html"> register </a>
+<br></br>
+<a href="logout.html">Logout</a>
+
+</body>
+
+
+</html>
