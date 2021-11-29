@@ -7,12 +7,16 @@ onclick="return check(this.form)" value="Login" target="_blank"
 	<input type="text" name = "username" placeholder="username" required/> </br>
 	<input type="password" name = "password" placeholder="password" required/></br>
 	<input type="submit" onclick="location.href='index.html'" value = Login />
+	<input type="button" onclick="location.href='register.html'" value = register />
 	{% if error %}
 		<p class="error"><strong>Error:</strong> {{error}}</p>
 	{% endif %}
 </form>
-
-<a href="Downloads/Flask_for_class/templates">Go back</a>
+<!-- <a href="register.html"> register </a> -->
+<!-- <a href="Downloads/Flask_for_class/templates">Go back</a> -->
+<form>
+ <input type="button" value="Go back!" onclick="history.back()">
+</form>
 
 </body>
 

@@ -10,7 +10,20 @@
 		<p class="error"><strong>Error:</strong> {{error}}</p>
 	{% endif %}
 </form>
-<a href="/">Go back</a>
+
+<label for="userType">Choose an account type:</label>
+
+<select name="userType" id="userType">
+  <option value="volvo">Customer</option>
+  <option value="saab">Staff</option>
+</select>
+<br>
+
+<form>
+ <input type="button" value="Go back!" onclick="history.back()">
+</form>
+
+
 </body>
 </html>
 

@@ -18,7 +18,6 @@
   <input type="text" placeholder="Search..">
 </div>
 
-
 <!-- 
 
 Anyone (including users not signed in) can see flights (future flights) based on the source airport,
@@ -34,6 +33,7 @@ on an airline and flight number combination and arrival or departure date.
 	<th>Destination Airport</th>
 	<th>Departure Dates</th>
 	<th>Status</th>
+	<th>Type</th>
 
 {% for line in posts %}
 	<tr>
@@ -42,6 +42,7 @@ on an airline and flight number combination and arrival or departure date.
 		<td>{{line['Destination_Airport']}}</td>
 		<td>{{line['Departure_Dates']}}</td>
 		<td>{{line['Status']}}</td>
+		<td>{{line['Type']}}</td>
 
 	</tr>
 {% endfor %}
@@ -51,7 +52,7 @@ on an airline and flight number combination and arrival or departure date.
 <br></br>
 <a href="register.html"> register </a>
 <br></br>
-<a href="logout.html">Logout</a>
+<a href="login.html">Logout</a>
 
 </body>
 
