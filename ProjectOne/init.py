@@ -2,14 +2,18 @@
 from flask import Flask, render_template, request, session, url_for, redirect
 import pymysql.cursors
 
+
+
+
 #Initialize the app from Flask
 app = Flask(__name__)
 
 #Configure MySQL
-conn = pymysql.connect(host='192.168.64.2',
-                       user='tommy',
-                       password='password',
-                       db='blog',
+conn = pymysql.connect(host='localhost',
+					   port = 8889,
+                       user='root',
+                       password='root',
+                       db='airport_reservation_schema',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
 
@@ -38,7 +42,7 @@ def loginAuth():
 	#cursor used to send queries
 	cursor = conn.cursor()
 	#executes query
-	query = 'SELECT * FROM user WHERE username = %s and password = %s'
+	query = 'SELECT * FROM flight'
 	cursor.execute(query, (username, password))
 	#stores the results in a variable
 	data = cursor.fetchone()
@@ -114,12 +118,12 @@ def logout():
 	return redirect('/')
 		
 app.secret_key = 'some key that you will never guess'
-#Run the app on localhost port 5000
+#Run the app on localhost port 6500
 #debug = True -> you don't have to restart flask
 #for changes to go through, TURN OFF FOR PRODUCTION
 if __name__ == "__main__":
 	# conn.close()
-	app.run('127.0.0.1', 7800, debug = True)
+	app.run('127.0.0.1', 6500, debug = True)
 
 
 
