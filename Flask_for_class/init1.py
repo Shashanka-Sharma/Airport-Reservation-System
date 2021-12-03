@@ -61,7 +61,9 @@ def registerAuth():
 	#grabs information from the forms
 	username = request.form['username']
 	password = request.form['password']
-
+	userType = request.form.get('userType')
+	print(userType)
+	print("HEEEE")
 	#cursor used to send queries
 	cursor = conn.cursor()
 	#executes query

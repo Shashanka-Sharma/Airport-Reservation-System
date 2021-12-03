@@ -1,6 +1,9 @@
+
+
 #Import Flask Library
 from flask import Flask, render_template, request, session, url_for, redirect
 import pymysql.cursors
+# import md5hash
 
 #Initialize the app from Flask
 app = Flask(__name__)
@@ -9,26 +12,47 @@ app = Flask(__name__)
 conn = pymysql.connect(host='192.168.64.2',
                        user='tommy',
                        password='password',
-                       db='blog',
+                       db='airport reservations',
                        charset='utf8mb4',
                        cursorclass=pymysql.cursors.DictCursor)
 
-#Define a route to hello function
+# #Define a route to hello function
 @app.route('/')
 def hello():
-	return render_template('index.html')
+	# query = 'SELECT * FROM airline'
+	cursor = conn.cursor()
+	# conn.commit()
+	cursor.execute('SELECT * FROM airline')
+	data1 = cursor.fetchall()
+	print(data1)
+	cursor.close()
+	for each in data1:
+		print(each)
+		print(each['name'])
+	return render_template('index.html',airline =data1)
+    # for each in data1:
+    # 	print(each)
+    #     print(each['flight'])
+
+
+# @app.route('/spending.html')
+# def spending():
+
+
+# 	return render_template('spending.html',tickets =)
+
 
 #Define route for login
-@app.route('/login')
+@app.route('/login.html')
 def login():
 	return render_template('login.html')
 
 #Define route for register
-@app.route('/register')
+@app.route('/register.html')
 def register():
 	return render_template('register.html')
 
-#Authenticates the login
+# Authenticates the login
 @app.route('/loginAuth', methods=['GET', 'POST'])
 def loginAuth():
 	#grabs information from the forms
@@ -38,7 +62,7 @@ def loginAuth():
 	#cursor used to send queries
 	cursor = conn.cursor()
 	#executes query
-	query = 'SELECT * FROM user WHERE username = %s and password = %s'
+	query = 'SELECT * FROM customer WHERE name = %s and password = %s'
 	cursor.execute(query, (username, password))
 	#stores the results in a variable
 	data = cursor.fetchone()
@@ -48,7 +72,7 @@ def loginAuth():
 	if(data):
 		#creates a session for the the user
 		#session is a built in
-		session['username'] = username
+		session['name'] = username
 		return redirect(url_for('home'))
 	else:
 		#returns an error message to the html page
@@ -59,13 +83,19 @@ def loginAuth():
 @app.route('/registerAuth', methods=['GET', 'POST'])
 def registerAuth():
 	#grabs information from the forms
+	cursor = conn.cursor()
+
 	username = request.form['username']
 	password = request.form['password']
+	userType = request.form.get('userType')
+	print(userType,"AQUI")
 
-	#cursor used to send queries
-	cursor = conn.cursor()
-	#executes query
-	query = 'SELECT * FROM user WHERE username = %s'
+	md5Que = 'SELECT MD5(%s);' 
+	cursor.execute(md5Que,(password))
+	password = list(cursor.fetchall()[0].values())[0]
+	# print(password,"WWWWWWWW")
+
+	query = 'SELECT * FROM customer WHERE name = %s'
 	cursor.execute(query, (username))
 	#stores the results in a variable
 	data = cursor.fetchone()
@@ -76,41 +106,86 @@ def registerAuth():
 		error = "This user already exists"
 		return render_template('register.html', error = error)
 	else:
-		ins = 'INSERT INTO user VALUES(%s, %s)'
-		# password = MD5(password)
-		cursor.execute(ins, (username, password)) 
-		conn.commit()
+		ins = 'INSERT INTO customer VALUES(%s,null, %s,null,null,null,null)' 
+		cursor.execute(ins,(username, password))
+		conn.commit() #commit only when changes 
 		cursor.close()
 		return render_template('index.html')
 
+
+
+
+
+
+
+
+
+	# username = request.form['username']
+	# password = request.form['password']
+	# print("H")
+	# #cursor used to send queries
+	# cursor = conn.cursor()
+	# #executes query
+	# # query = 'SELECT * FROM customer WHERE name = %s'
+	# test = 'INSERT INTO customer values ("test", "test@gmail.com", "test", "concete", "test", "test", "test")'
+	# cursor.execute(test)
+	# # cursor.execute(ins) 
+	# #stores the results in a variable
+	# data = cursor.fetchone()
+	# #use fetchall() if you are expecting more than 1 data row
+	# # error = None
+	# # if(data):
+	# # 	#If the previous query returns data, then user exists
+	# # 	error = "This user already exists"
+	# # 	return render_template('register.html', error = error)
+	# # else:
+	# # ins = 'INSERT INTO customer VALUES(%s, %s)'
+	# # ins = 'INSERT INTO customer VALUES("test", "test1")'
+	# # ins = 'INSERT INTO customer values ("Bob", "bob12@gmail.com", "Gorillanuggets12", "concete", "04432141", "USA", "21341332")'
+	# # password = MD5(password)
+	# # cursor.execute(ins) 
+	# conn.commit()
+	# # cursor.close()
+	return render_template('index.html')
+
 @app.route('/home')
 def home():
-    
-    username = session['username']
-    cursor = conn.cursor();
-    # query = 'SELECT ts, blog_post FROM blog WHERE username = %s ORDER BY ts DESC'
-    cursor.execute(query, (username))
-    data1 = cursor.fetchall() 
-    # for each in data1:
-        # print(each['blog_post'])
-    cursor.close()
-    return render_template('home.html', username=username, posts=data1)
+	username = session['name']
+	cursor = conn.cursor()
+	# conn.commit()
+	cursor.execute('SELECT * FROM airline')
+	data1 = cursor.fetchall()
+	print(data1)
+	for each in data1:
+		print(each)
+		print(each['name'],"data1")
+
+	cursor.execute('SELECT * FROM `purchase`')
+	data2 = cursor.fetchall()
+	print(data2,"data2")
+
+	for each in data2:
+		print(each)
+
+	cursor.close()
+
+	return render_template('home.html', username=username, airline=data1,tickets = data2)
 
 		
-# @app.route('/post', methods=['GET', 'POST'])
-# def post():
-# 	username = session['username']
-# 	cursor = conn.cursor();
-# 	blog = request.form['blog']
-# 	query = 'INSERT INTO blog (blog_post, username) VALUES(%s, %s)'
-# 	cursor.execute(query, (blog, username))
-# 	conn.commit()
-# 	cursor.close()
-# 	return redirect(url_for('home'))
+# # @app.route('/post', methods=['GET', 'POST'])
+# # def post():
+# # 	username = session['username']
+# # 	cursor = conn.cursor();
+# # 	blog = request.form['blog']
+# # 	query = 'INSERT INTO blog (blog_post, username) VALUES(%s, %s)'
+# # 	cursor.execute(query, (blog, username))
+# # 	conn.commit()
+# # 	cursor.close()
+# # 	return redirect(url_for('home'))
 
 @app.route('/logout')
 def logout():
-	session.pop('username')
+	session.pop('name')
 	return redirect('/')
 		
 app.secret_key = 'some key that you will never guess'
@@ -119,7 +194,36 @@ app.secret_key = 'some key that you will never guess'
 #for changes to go through, TURN OFF FOR PRODUCTION
 if __name__ == "__main__":
 	# conn.close()
+	cursor = conn.cursor()
+
+	# #executes query
+	# # query = 'SELECT * FROM customer WHERE name = %s'
+	# # cursor.execute(query,('Bob'))
+	# #stores the results in a variable
+	# # data = cursor.fetchone()
+	# #use fetchall() if you are expecting more than 1 data row
+	# print("Connected to the database")
+
+	# error = None
+	# # if(data):
+	# # 	#If the previous query returns data, then user exists
+	# # 	error = "This user already exists"
+	# # 	return render_template('register.html', error = error)
+	# # else:
+	
+	# ins = 'INSERT INTO customer values ("Bob", "bob12@gmail.com", "Gorillanuggets12", "123456789", "04432141", "USA", "21341332")'
+	# cursor.execute(ins)
+	# conn.commit()
+	# # ins = 'INSERT INTO customer VALUES("test", "test1")'
+	# # password = MD5(password)
+	# # cursor.execute(ins, (username, password)) 
+	# conn.commit()
+	cursor.close()
+
+
 	app.run('127.0.0.1', 7800, debug = True)
+
+
 
 
 

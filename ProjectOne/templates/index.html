@@ -28,21 +28,21 @@ on an airline and flight number combination and arrival or departure date.
  -->
 
 <table>
-	<th>Flights</th>
-	<th>Source airport</th>
-	<th>Destination Airport</th>
+	<th>name</th>
+	<th>id</th>
+	<!-- <th>Destination Airport</th>
 	<th>Departure Dates</th>
 	<th>Status</th>
-	<th>Type</th>
+	<th>Type</th> -->
 
-{% for line in posts %}
+{% for line in airline %}
 	<tr>
-		<td>{{line['flight']}}</td>
-		<td>{{line['Source_airport']}}</td>
-		<td>{{line['Destination_Airport']}}</td>
-		<td>{{line['Departure_Dates']}}</td>
-		<td>{{line['Status']}}</td>
-		<td>{{line['Type']}}</td>
+		<td>{{line['name']}}</td>
+		<td>{{line['id']}}</td>
+		<!-- <td>{{line['Destination_Airport']}}</td> -->
+		<!-- <td>{{line['Departure_Dates']}}</td> -->
+		<!-- <td>{{line['Status']}}</td> -->
+		<!-- <td>{{line['Type']}}</td> -->
 
 	</tr>
 {% endfor %}

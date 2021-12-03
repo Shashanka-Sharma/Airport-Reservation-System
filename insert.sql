@@ -10,14 +10,14 @@ INSERT INTO airport values ("10001",
 INSERT INTO customer values ("Bob", 
                      "bob12@gmail.com", 
                      "Gorillanuggets12",
-                     123456789,
+                     "123456789",
                      "01/01/22",
                      "USA",
                      "01/01/01"
                      );
 INSERT INTO address values ("bob12@gmail.com",
                    "521",
-                   "Thomas St"
+                   "Thomas St",
                     "Queens",
                     "New York"
                    );
@@ -27,7 +27,7 @@ INSERT INTO phone_num values ("bob12@gmail.com",
 INSERT INTO customer values ("Rob", 
                      "rob12@gmail.com", 
                      "Monkeysticks12",
-                     123456781,
+                     "123456781",
                      "02/02/22",
                      "China",
                      "02/02/01"
@@ -44,7 +44,7 @@ INSERT INTO phone_num values ("rob12@gmail.com",
 INSERT INTO customer values ("Sally", 
                      "sally12@gmail.com", 
                      "turtlefever12",
-                     123456782,
+                     "123456782",
                      "03/03/23",
                      "UK",
                      "03/03/01"

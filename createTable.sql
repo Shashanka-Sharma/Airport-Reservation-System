@@ -1,7 +1,6 @@
 CREATE TABLE airline(
     name varchar(20),
-    id   char(5),
-    flight_num int
+    id   char(5)
     );
     
 CREATE TABLE airplane(
@@ -17,8 +16,8 @@ CREATE TABLE airport(
     );
 
 CREATE TABLE ticket(
-    ticket_id   char(5)
-    id   char(5)
+    ticket_id   char(5),
+    id   char(5),
     base_price float
     );
 
@@ -58,18 +57,18 @@ CREATE TABLE name(
 
 CREATE TABLE staff_phone_num(
     username varchar(20),
-    phone_num int
+    phone_num varchar(20)
     );
 
 CREATE TABLE phone_num(
     email varchar(20),
-    phone_num int
+    phone_num varchar(20)
     );
 
 CREATE TABLE customer(
     name varchar(20),
     email varchar(20),
-    password varchar(20),
+    password varchar(32),
     passport_num varchar(20),
     passport_expire varchar(20),
     passport_country varchar(20),
@@ -80,7 +79,6 @@ CREATE TABLE staff(
     username varchar(20),
     password varchar(20),
     id char(5),
-    name varchar(20),
     date_of_birth varchar(20)
     );
 
@@ -97,7 +95,7 @@ CREATE TABLE purchase(
     ticket_id char(5),
     date varchar(20),
     time varchar(20),
-    sold_price float,
+    sold_price float
     );
 
 CREATE TABLE payment_info(
