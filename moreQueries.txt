@@ -54,6 +54,270 @@ INSERT INTO uses VALUES (1208211, "53242");
 INSERT INTO uses VALUES (1206211, "53242");
 
 
+--------------------------------------------------------------------------
+
+# flights purchased query
+SELECT flight_num, ticket_id, status 
+FROM flight NATURAL JOIN purchase 
+WHERE purchase.email = "bob12@gmail.com";
+
+# flights departing at query
+SELECT name, city, flight_num, ticket_id, status, date, time, 
+FROM flight NATURAL JOIN departs NATURAL JOIN airport
+WHERE city = "Shanghai" AND name = "PVG" AND (date > GETDATE())
+
+# flights arriving at query 
+SELECT name, city, flight_num, ticket_id, status, date, time
+FROM flight NATURAL JOIN arrives NATURAL JOIN airport
+WHERE city = "NYC" AND name = "JFK" AND (date > GETDATE());
+
+# flights taken query
+SELECT DISTINCT flight_num, ticket_id, name, city 
+FROM flight NATURAL JOIN purchase NATURAL JOIN airport
+WHERE email = "bob12@gmail.com" 
+
+# upcoming flights in the next 30 days
+// use date time to find current date and put it in "MM/DD/YY" format
+// maybe create a function in python to help convert date?
+// turn the 'DD' into an int
+// create a container to somehow store the range of dates possible.
+// Ex. 
+// Today is : "12/04/21"
+// int("04") = 4
+// valid dates 12/04/21 - 12/31/21. Handle overflow by incrementing
+// the number of months counter (December is an edge case, next month is 1)
+// the next four dates that would work is 1/01 - 1/04 . 
+// Would probably need to query multiple times. 
+// I foresee error handling because every month has different # of days. We
+// just the maximum days to 29 because of February (Our airport_system 
+// doesn't operate flights on the days past the 29th)
+
+SELECT DISTINCT flight_num, date, time 
+FROM departs NATURAL JOIN airport
+WHERE todays_date < date < the maximum day in current month
+AND 
+SELECT DISTINCT flight_num, date, time
+FROM departs NATURAL JOIN airport
+WHERE date < first_day_of_month + overflow
+// overflow would be the number of days leftover, in the example above, 4 
+// days carried over to the next month because we started at 12/04.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+INSERT INTO flight VALUES (1204444, "10118", "On Time");
+INSERT INTO airline VALUES ("American Airlines" , "10100");
+INSERT INTO departs VALUES (1204444, "10000", "04/04/22", "16:00");
+INSERT INTO arrives VALUES (1204444, "10001", "04/05/22", "17:00"); 
+INSERT INTO ticket VALUES ("10118", "10100", 100);
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// adding trip type functionality
+// change flight to add another attribute "trip_type" of varchar(20)
+
+INSERT INTO flight values (1203901,
+                   "10111",
+                   "On Time",
+                   "One Way"
+                          );
+INSERT INTO flight values (1203211,
+                   "10112",
+                   "On Time",
+                    "One Way"
+                   );
+INSERT INTO flight values (1200211,
+                   "10113",
+                   "Delayed",
+                    "One Way"
+                   );
+
+INSERT INTO flight VALUES (1201111,"10114","Delayed", "One Way");
+INSERT INTO flight VALUES (1203231,"10115","On Time","One Way");
+INSERT INTO flight VALUES (1208211,"10116","Delayed","One Way");
+INSERT INTO flight VALUES (1206211,"10117","Delayed","One Way");
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// querying based on arrival date
+SELECT flight_num, name, status
+FROM airline NATURAL JOIN arrives NATURAL JOIN ticket NATURAL JOIN flight
+WHERE name = "China Eastern" AND flight_num = 1203901 AND date = "2021-12-21";
+
+// querying based on departure date
+SELECT flight_num, name, status
+FROM airline NATURAL JOIN departs NATURAL JOIN ticket NATURAL JOIN flight
+WHERE name = "China Eastern" AND flight_num = 1203901 AND date = "2021-12-11";
+
+END OF QUESTION 1
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+
+CHANGING DATE DATA TYPES
+DELETE FROM departs;
+DELETE FROM arrives;
+DELETE FROM purchase;
+DELETE FROM staff;
+---
+ALTER TABLE `arrives` DROP `date`, DROP `time`;
+ALTER TABLE `departs` DROP `date`, DROP `time`;
+ALTER TABLE purchase DROP `date`, DROP `time`;
+ALTER TABLE staff DROP `date_of_birth`;
+---
+
+INSERT INTO departs VALUES (1203901, "10001" , "2022-01-01", "06:00");
+INSERT INTO departs VALUES (1203211, "10001" , "2022-02-01", "07:00");
+INSERT INTO departs VALUES (1200211, "10001" , "2022-03-01", "08:00");
+INSERT INTO departs VALUES (1201111, "10001" , "2022-04-01", "09:00");
+INSERT INTO departs VALUES (1203231, "10001" , "2022-05-01", "10:00");
+INSERT INTO departs VALUES (1208211, "10001" , "2022-06-01", "11:00");
+INSERT INTO departs VALUES (1206211, "10001" , "2022-07-01", "12:00");
+INSERT INTO departs VALUES (1204444, "10000", "2022-08-01", "13:00");
+
+INSERT INTO arrives VALUES (1204444, "10001", "2022-08-02", "14:00"); 
+INSERT INTO arrives VALUES (1203901, "10000" , "2022-01-02", "15:00");
+INSERT INTO arrives VALUES (1203211, "10000" , "2022-02-02", "16:00");
+INSERT INTO arrives VALUES (1200211, "10000" , "2022-03-02", "17:00");
+INSERT INTO arrives VALUES (1201111, "10000" , "2022-04-02", "18:00");
+INSERT INTO arrives VALUES (1203231, "10000" , "2022-05-02", "19:00");
+INSERT INTO arrives VALUES (1208211, "10000" , "2022-06-02", "20:00");
+INSERT INTO arrives VALUES (1206211, "10000" , "2022-07-02", "21:00");
+
+INSERT INTO purchase values ("bob12@gmail.com",
+                     "10111",
+                     "2021-12-12",
+                     "11:27",
+                     221.00
+                     );
+INSERT INTO purchase values ("rob12@gmail.com",
+                     "10112",
+                     "2021-12-13",
+                     "13:27",
+                     150.00
+                     );
+INSERT INTO purchase values ("sally12@gmail.com",
+                     "10113",
+                     "2021-12-15",
+                     "15:27",
+                     600.00
+                     );
+                     
+INSERT INTO staff values ("alex@chinaeast.com",
+                  "chickenflurry12",
+                  "10101",
+                  "1997-12-12"
+                  );
+                  
+                  
+                  
+// date time queries for upcoming
+
+--- Testing
+INSERT INTO purchase VALUES ('testme', "10110" , "2022-07-02", "11:27:00",200);
+SELECT *
+FROM ((`flight` INNER JOIN airport as S ON source_airport_id = S.airport_id) INNER JOIN airport as D ON destination_airport_id = D.airport_id)
+WHERE source_airport_id = "10001" AND destination_airport_id = '10000';
+---
+MERGING ALL FLIGHT INFORMATION
+DELETE FROM flight;
+DROP TABLE departs;
+DROP TABLE arrives;
+
+INSERT INTO flight values (1203901,"10111","On Time","One Way","2022-01-01", "06:00","2022-01-02", "15:00", "10001","10000" );
+INSERT INTO flight values (1203211,"10112","On Time","One Way","2022-02-01", "07:00","2022-02-02", "16:00","10001","10000" );
+INSERT INTO flight values (1200211,"10113","Delayed","One Way", "2022-03-01", "08:00", "2022-03-02", "17:00","10001","10000");
+INSERT INTO flight VALUES (1201111,"10114","Delayed","One Way", "2022-04-01", "09:00", "2022-04-02", "18:00","10001","10000");
+INSERT INTO flight VALUES (1203231,"10115","On Time","One Way", "2022-05-01", "10:00", "2022-05-02", "19:00","10001","10000");
+INSERT INTO flight VALUES (1208211,"10116","Delayed","One Way", "2022-06-01", "11:00", "2022-06-02", "20:00","10001","10000");
+INSERT INTO flight VALUES (1206211,"10117","Delayed","One Way", "2022-07-01", "12:00" , "2022-07-02", "21:00","10001","10000");
+INSERT INTO flight VALUES (1204444, "10118", "On Time", "Round Trip", "2022-08-01", "13:00", "2022-08-02", "14:00", "10000", "10000" ); 
+---
+
+
+--
+
+1a. Search for future flights based on source city/airport name, destination city/airport name,
+departure date for one way (departure and return dates for round trip).
+
+SELECT flight_num, ticket_id, status, trip_type, depart_date, depart_time, arrival_date,arrival_time
+FROM flight
+WHERE source_airport_id IN (SELECT airport_id FROM airport WHERE name = "PVG" AND city = "Shanghai")
+AND destination_airport_id IN (SELECT airport_id FROm airport WHERE name = "JFK" AND city = "NYC")
+AND depart_date = "2022-01-01" AND depart_time = "06:00" AND arrival_date = "2022-01-02" AND arrival_time = "15:00"
+AND trip_type = "One Way"
+
+1b. Will be able to see the flights status based on airline name, flight number, arrival/departure
+date.
+
+SELECT flight_num, name, status
+FROM airline NATURAL JOIN ticket NATURAL JOIN flight
+WHERE name = "China Eastern" AND flight_num = 1203901 AND depart_date = "2022-01-01" AND arrival_date = "2022-01-02";
+
+4. Provide various ways for the user to see flights information which he/she purchased.
+The default should be showing for the future flights. Optionally you may include a way for the user to
+specify a range of dates, specify destination and/or source airport name or city name etc.
+
+// Default query in Table
+SELECT * 
+from flight 
+WHERE depart_date > todays_date
+
+// Query for flights purchased
+SELECT *
+FROM flight NATURAL JOIN purchase 
+WHERE purchase.email = "bob12@gmail.com";
+
+
+
+5. Search for flights: Search for future flights (one way or round trip) based on source city/airport name,
+destination city/airport name, dates (departure or return). Find a way to implement null values
+
+SELECT flight_num, ticket_id, status, trip_type, depart_date, depart_time, arrival_date,arrival_time
+FROM flight
+WHERE source_airport_id IN (SELECT airport_id FROM airport WHERE name = "PVG" AND city = "Shanghai")
+AND destination_airport_id IN (SELECT airport_id FROm airport WHERE name = "JFK" AND city = "NYC")
+AND depart_date = "2022-01-01" AND depart_time = "06:00" AND arrival_date = "2022-01-02" AND arrival_time = "15:00"
+AND trip_type = "One Way"
+
+6. Purchase tickets: Customer chooses a flight and purchase ticket for this flight, providing all the
+needed data, via forms. You may find it easier to implement this along with a use case to search for
+flights.
+
+(Post request)
+// User in
+INSERT INTO purchase VALUES (email, ticket_id, GETDATE(), GETTIME(), price)
+
+
+
+
+---
+11. View frequent customers: Airline Staff will also be able to see the most frequent customer within
+the last year. In addition, Airline Staff will be able to see a list of all flights a particular Customer has
+taken only on that particular airline.
+12. View reports: Total amounts of ticket sold based on range of dates/last year/last month etc. Month
+wise tickets sold in a bar chart/table.
+13. View Earned Revenue: Show total amount of revenue earned from ticket sales in the last month and
+last year.
+14. View Top destinations: Find the top 3 most popular destinations for last 3 months and last year
+(based on tickets already sold).
+
+
+9. View flight ratings: Airline Staff will be able to see each flight’s average ratings and all the comments
+and ratings of that flight given by the customers.
+
+
+---
+
+
+
+
+
+--
+
+
+
+
+
 
 
 

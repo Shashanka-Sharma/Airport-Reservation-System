@@ -19,22 +19,22 @@
 
 
 <table>
-	<th>Flights</th>
-	<th>Source airport</th>
+	<th>name</th>
+	<th>id</th><!-- 
 	<th>Destination Airport</th>
 	<th>Departure Dates</th>
 	<th>Status</th>
-	<th>Type</th>
+	<th>Type</th> -->
 
 
-{% for line in posts %}
+{% for line in airline %}
 	<tr>
-		<td>{{line['flight']}}</td>
-		<td>{{line['Source_airport']}}</td>
-		<td>{{line['Destination_Airport']}}</td>
+		<td>{{line['name']}}</td>
+		<td>{{line['id']}}</td>
+		<!-- <td>{{line['Destination_Airport']}}</td>
 		<td>{{line['Departure_Dates']}}</td>
 		<td>{{line['Status']}}</td>
-		<td>{{line['Type']}}</td>
+		<td>{{line['Type']}}</td> -->
 
 	</tr>
 {% endfor %}
@@ -60,6 +60,29 @@
 </div>
 
 
+
+<label for="start">Start date:</label>
+
+<input type="date" id="start" name="trip-start"
+       value="2018-07-22"
+       min="2018-01-01" max="2018-12-31">
+
+
+<table>
+	<th>Ticket ID</th>
+	<th>Sold Price</th>
+
+
+
+{% for ticket in tickets %}
+	<tr>
+		<td>{{ticket['ticket_id']}}</td>
+		<td>{{ticket['sold_price']}}</td>
+	</tr>
+{% endfor %}
+
+
+</table>
 </body>
 
 

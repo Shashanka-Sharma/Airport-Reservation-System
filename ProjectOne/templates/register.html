@@ -5,23 +5,32 @@
 <form action="/registerAuth" method="POST">
 	<input type="text" name = "username" placeholder="username" required/> </br>
 	<input type="password" name = "password" placeholder="password" required/></br>
-	<input type="submit" onclick = "index.html" value = Register />
+	<input type="submit" value = Register />
 	{% if error %}
 		<p class="error"><strong>Error:</strong> {{error}}</p>
 	{% endif %}
+
 </form>
 
-<label for="userType">Choose an account type:</label>
 
-<select name="userType" id="userType">
-  <option value="volvo">Customer</option>
-  <option value="saab">Staff</option>
-</select>
-<br>
+
+
+	<label for="userType">Choose an account type:</label>
+
+	<select name="userType" id="userType">
+	  <option value="Customer">Customer</option>
+	  <option value="Staff">Staff</option>
+	</select>
+	<br>
+		
+
+
 
 <form>
  <input type="button" value="Go back!" onclick="history.back()">
 </form>
+
+<h1 id = "test">test </h1>
 
 
 </body>
